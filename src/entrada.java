@@ -104,65 +104,67 @@ public class entrada {
                     break;
 
                 case 3:
-                    if (miBiblioteca.getCatalogo() != null) {
-                        try {
-                            System.out.println("¿Qué tipo de libro deseas agregar?");
-                            System.out.println("1. Terror");
-                            System.out.println("2. Comedia");
-                            System.out.println("3. Policiaca");
-                            int opcionTipoLibro = teclado.nextInt();
+                    if (miBiblioteca != null) {
+                        if (miBiblioteca.getCatalogo() != null) {
+                            try {
+                                System.out.println("¿Qué tipo de libro deseas agregar?");
+                                System.out.println("1. Terror");
+                                System.out.println("2. Comedia");
+                                System.out.println("3. Policiaca");
+                                int opcionTipoLibro = teclado.nextInt();
 
-                            System.out.println("Ingresa los detalles del libro:");
-                            System.out.println("Autor:");
-                            String autor = teclado.next();
-                            System.out.println("ISBN:");
-                            String isbn = teclado.next();
-                            System.out.println("Número de páginas:");
-                            int numeroPaginas = teclado.nextInt();
+                                System.out.println("Ingresa los detalles del libro:");
+                                System.out.println("Autor:");
+                                String autor = teclado.next();
+                                System.out.println("ISBN:");
+                                String isbn = teclado.next();
+                                System.out.println("Número de páginas:");
+                                int numeroPaginas = teclado.nextInt();
 
-                            libros nuevoLibro = null;
+                                libros nuevoLibro = null;
 
-                            switch (opcionTipoLibro) {
-                                case 1:
-                                    System.out.println("Calificación:");
-                                    int calificacion = teclado.nextInt();
-                                    nuevoLibro = new terror(autor, isbn, numeroPaginas, calificacion);
-                                    break;
-                                case 2:
-                                    System.out.println("Tipo de humor:");
-                                    String tipoDeHumor = teclado.next();
-                                    nuevoLibro = new comedia(autor, isbn, numeroPaginas, tipoDeHumor);
-                                    break;
-                                case 3:
-                                    System.out.println("Trama:");
-                                    String trama = teclado.next();
-                                    System.out.println("Cantidad de personajes:");
-                                    int cantidadPersonajes = teclado.nextInt();
-                                    personajes[] personajesArray = new personajes[cantidadPersonajes];
-                                    for (int i = 0; i < cantidadPersonajes; i++) {
-                                        System.out.println("Nombre del personaje " + (i + 1) + ":");
-                                        String nombrePersonaje = teclado.next();
-                                        personajesArray[i] = new personajes(nombrePersonaje);
-                                    }
-                                    nuevoLibro = new policiaca(autor, isbn, numeroPaginas, trama, personajesArray);
-                                    break;
-                                default:
-                                    System.out.println("Opción no válida.");
-                                    break;
+                                switch (opcionTipoLibro) {
+                                    case 1:
+                                        System.out.println("Calificación:");
+                                        int calificacion = teclado.nextInt();
+                                        nuevoLibro = new terror(autor, isbn, numeroPaginas, calificacion);
+                                        break;
+                                    case 2:
+                                        System.out.println("Tipo de humor:");
+                                        String tipoDeHumor = teclado.next();
+                                        nuevoLibro = new comedia(autor, isbn, numeroPaginas, tipoDeHumor);
+                                        break;
+                                    case 3:
+                                        System.out.println("Trama:");
+                                        String trama = teclado.next();
+                                        System.out.println("Cantidad de personajes:");
+                                        int cantidadPersonajes = teclado.nextInt();
+                                        personajes[] personajesArray = new personajes[cantidadPersonajes];
+                                        for (int i = 0; i < cantidadPersonajes; i++) {
+                                            System.out.println("Nombre del personaje " + (i + 1) + ":");
+                                            String nombrePersonaje = teclado.next();
+                                            personajesArray[i] = new personajes(nombrePersonaje);
+                                        }
+                                        nuevoLibro = new policiaca(autor, isbn, numeroPaginas, trama, personajesArray);
+                                        break;
+                                    default:
+                                        System.out.println("Opción no válida.");
+                                        break;
+                                }
+
+                                // Agregar el libro al depósito de la biblioteca
+                                miBiblioteca.getDeposito().agregarLibro(nuevoLibro);
+
+                            } catch (NoHayHuecoException e) {
+                                System.out.println("No hay suficiente espacio en el depósito para agregar el libro.");
+                            } catch (CatalogoNoInicializadoException e) {
+                                System.out.println("El catálogo no está inicializado.");
                             }
-
-                            // Agregar el libro al depósito de la biblioteca
-                            miBiblioteca.getDeposito().agregarLibro(nuevoLibro);
-
-
-
-                        } catch (NoHayHuecoException e) {
-                            System.out.println("No hay hueco en el depósito.");
-                        } catch (CatalogoNoInicializadoException e) {
+                        } else {
                             System.out.println("El catálogo no está inicializado.");
                         }
                     } else {
-                        System.out.println("El catálogo no está inicializado.");
+                        System.out.println("Debes crear primero una biblioteca.");
                     }
                     break;
 
@@ -198,7 +200,7 @@ public class entrada {
                         } catch (CatalogoNoInicializadoException e) {
                             System.out.println("El catálogo no está inicializado");
                         } catch (NoSeEncuentraException e) {
-                            System.out.println();
+                            System.out.println("No se encuentra el libro");
                         }
                     } else {
                         throw new CatalogoNoInicializadoException("El catálogo no está inicializado");
@@ -216,7 +218,7 @@ public class entrada {
 
                         }
                     } else {
-                        throw new CatalogoNoInicializadoException("El catálogo no está inicializado");
+                        System.out.println("El catálogo no está inicializado");
                     }
                     break;
 
@@ -227,12 +229,12 @@ public class entrada {
                         try {
                             miBiblioteca.buscarLibro(buscarISBN);
                         } catch (CatalogoNoInicializadoException e) {
-                            System.out.println("El catalogo no esta inicializado");
-                        }catch ( NoSeEncuentraException e) {
-                            System.out.println("El catalogo no esta no se encuentra");
+                            System.out.println("El catálogo no está inicializado");
+                        } catch (NoSeEncuentraException e) {
+                            System.out.println("El libro no se encuentra");
                         }
                     } else {
-                        throw new CatalogoNoInicializadoException("El catálogo no está inicializado");
+                        System.out.println("El catálogo no está inicializado");
                     }
                     break;
 
@@ -243,10 +245,12 @@ public class entrada {
                         try {
                             miBiblioteca.eliminarLibro(eliminarISBN);
                         } catch (CatalogoNoInicializadoException e) {
-                            System.out.println("El catalogo no esta inicializado");
+                            System.out.println("El catálogo no está inicializado");
+                        } catch (NoSeEncuentraException e) {
+                            System.out.println("El libro no se encuentra para eliminar");
                         }
                     } else {
-                        System.out.println("Debes crear primero una biblioteca y un catálogo.");
+                        System.out.println("El catálogo no está inicializado");
                     }
                     break;
 
@@ -255,13 +259,13 @@ public class entrada {
                         try {
                             miBiblioteca.exportarLibros();
                             System.out.println("Se ha exportado el catálogo a un fichero.");
-                        } catch ( CatalogoNoInicializadoException e) {
-                            System.out.println("El catalogo no esta inicializado");
-                        }catch (IOException e) {
-                            System.out.println("fallo al exportar");
+                        } catch (CatalogoNoInicializadoException e) {
+                            System.out.println("El catálogo no está inicializado");
+                        } catch (IOException e) {
+                            System.out.println("Error al exportar los libros");
                         }
                     } else {
-                        throw new CatalogoNoInicializadoException("El catálogo no está inicializado");
+                        System.out.println("El catálogo no está inicializado");
                     }
                     break;
 
@@ -271,12 +275,12 @@ public class entrada {
                             miBiblioteca.importarLibros();
                             System.out.println("Se han importado los libros desde el fichero.");
                         } catch (IOException | ClassNotFoundException | ClassCastException e) {
-                            System.out.println(e.getMessage());
-                        } catch (CatalogoNoInicializadoException e){
-                            System.out.println("El catalogo no esta inicializado");
+                            System.out.println("Error al importar los libros: " + e.getMessage());
+                        } catch (CatalogoNoInicializadoException e) {
+                            System.out.println("El catálogo no está inicializado");
                         }
                     } else {
-                        throw new CatalogoNoInicializadoException("El catálogo no está inicializado");
+                        System.out.println("El catálogo no está inicializado");
                     }
                     break;
 
@@ -285,7 +289,7 @@ public class entrada {
                     if (miBiblioteca != null) {
                         miBiblioteca.listarLibrosDeposito();
                     } else {
-                        System.out.println("Debes crear primero una biblioteca y un catálogo.");
+                        System.out.println("El catálogo no está inicializado");
                     }
                     break;
             }
